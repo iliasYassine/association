@@ -5,7 +5,7 @@ const { Sequelize } = require('sequelize');
 
 console.log("teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest");
 
-const sequelize = new Sequelize('job_board', 'root', "root", {
+const sequelize = new Sequelize('association', 'root', "root", {
   dialect: 'mysql',
   host: 'localhost'
 })
