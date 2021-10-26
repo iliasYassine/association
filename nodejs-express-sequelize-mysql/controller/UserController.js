@@ -63,7 +63,7 @@ exports.updateUser=function(req,res){
 exports.deleteUser=function (req, res) {
    console.log("delete bien entree dedans ")
    // Delete everyone with id 
- User.destroy({
+ user.destroy({
   where: {
     
     id:req.body.id
@@ -71,26 +71,26 @@ exports.deleteUser=function (req, res) {
 });
 
 // Truncate the table
- User.destroy({
+ user.destroy({
    truncate: true
  });
 res.json("utilisateur bien supprimé")
 } 
 
 ////////////////////////////// SIGN UP  UTILISEE //////////////////////////
-exports.signup=function(req,res){
-  bcrypt.hash(req.body.password, 10)
-  .then(hash => {
-    const user = new User({
-      email: req.body.email,
-      password: hash
-    });
-    user.save()
-      .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-      .catch(error => res.status(400).json({ error }));
-  })
-  .catch(error => res.status(500).json({ error }));
-}
+// exports.signup=function(req,res){
+//   bcrypt.hash(req.body.password, 10)
+//   .then(hash => {
+//     const user = new User({
+//       email: req.body.email,
+//       password: hash
+//     });
+//     user.save()
+//       .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+//       .catch(error => res.status(400).json({ error }));
+//   })
+//   .catch(error => res.status(500).json({ error }));
+// }
 
 
    //////////////////LOGIN/////////////////////////////
