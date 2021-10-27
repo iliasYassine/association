@@ -1,6 +1,6 @@
 
 
-const sdf = require('../model/ModelBenevole');
+const benevole = require('../model/ModelBenevole');
 
 
 ///fonction1
@@ -13,7 +13,7 @@ exports.benevole = function (req, res) {
    
    benevole1.save().then((e) => {
       if (e) console.log(e);
-      console.log('ilias was saved to the datsabase!');
+      
       res.send('benevole bien creer');
    })
 }

@@ -100,14 +100,29 @@ router.get('/benevole/findergetpk',benevole_controller.FindByPK);
 router.delete('/sdf/delete/:id' ,benevole_controller.deleteBenevole);
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// ASSOCIATION //////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///////// post BENEVOLES CREATE ///////
+var association_controller = require('../controller/associationController');
+router.post('/assoc/create', association_controller.assoc);
 
+/// get  SDF////////
+router.get('/assoc/get', association_controller.getAllAssoc);
 
+//get finone userr/////////////
+//router.get('/user/findOneUser', user_controller.findOneUser);
 
+////////////update //////////////////////////////////////////////
+router.put('/assoc/update/:id', association_controller.updateAssoc);
 
+///////////////////finderpk////////////////////////////////
+router.get('/assoc/findergetpk',association_controller.FindByPK);
 
+////////////////DELETE SDF///////  /////////////
 
-
+router.delete('/assoc/delete/:id' ,association_controller.deleteAssoc);
 
 
 
