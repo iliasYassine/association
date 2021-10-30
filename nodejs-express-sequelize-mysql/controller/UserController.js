@@ -1,8 +1,9 @@
 
 
 const user = require('../model/ModelUser');
+var bcrypt = require('bcrypt');
 
-
+const jwtToken = require('../controller/jwtToken')
 ///fonction1
 exports.user = function (req, res) {
    console.log(req.body);
@@ -77,45 +78,71 @@ exports.deleteUser=function (req, res) {
 res.json("utilisateur bien supprimé")
 } 
 
-////////////////////////////// SIGN UP  UTILISEE //////////////////////////
-// exports.signup=function(req,res){
-//   bcrypt.hash(req.body.password, 10)
-//   .then(hash => {
-//     const user = new User({
-//       email: req.body.email,
-//       password: hash
-//     });
-//     user.save()
-//       .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-//       .catch(error => res.status(400).json({ error }));
-//   })
-//   .catch(error => res.status(500).json({ error }));
-// }
-
-
+///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
    //////////////////LOGIN/////////////////////////////
+
+   /////////////////////////////////////////////////
+   ///////////////////////////////////////////////
    exports.login = function(req, res, next)  {
-      user.findOne({ email: req.body.email })
-        .then(user => {
-          if (!user) {
-            return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-          }
-          bcrypt.compare(req.body.password, user.password)
-            .then(valid => {
-              if (!valid) {
-                return res.status(401).json({ error: 'Mot de passe incorrect !' });
-              }
-              res.status(200).json({
-                userId: user.id,
-                token: jwt.sign(
-                  { userId: user.id },
-                  'RANDOM_TOKEN_SECRET',
-                  { expiresIn: '24h' }
-                )
+     var email= req.body.email;
+     var password=req.body.password;
+
+     if (email==null ||  password == null){
+       console.log("dans le 1er if ")
+       return res.status(400).json({'error ': 'missing pramameters'});
+     }
+      
+     user.findOne({
+       where: {email: email}
+     })
+     .then(function(userFound){
+        if(userFound){
+          console.log("dans le 2er if ")
+          
+      console.log("userFound password : " +userFound.password)
+      ////////////////////////////////////////////////////////////////////////////////////
+          bcrypt.compare(password,userFound.password, function(errBycrypt,resBycrypt){
+            //////////////////////////////////////////////////////////////////////////////
+            console.log("apres le bcrypt.compare")
+            console.log(req.body.password);
+            console.log("userFound password : " +userFound.password)
+            console.log(password);
+      
+             console.log("userFound password : " +userFound.password);
+
+            console.log(resBycrypt);
+
+      /////ici le problem resBycrypt est a FFFFFFFFFFFAAAAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLSSSSSSSSSSSSEEE false
+            if(resBycrypt){
+              console.log("dans le 3er if ")
+              return res.status(200).json({
+                'userId':userFound.id,
+                'token': jwtToken.generatetoken(userFound)
               });
-            })
-            .catch(error => res.status(500).json({ error }));
-        })
-        .catch(error => res.status(500).json({ error }));
+
+            }else{
+
+              console.log(req.body.password);
+              console.log("userFound password : " +userFound.password)
+                return res.status(403).json({"error ":"invalide password"});
+            }
+          });
+        }else{
+          return res.status(404).json({'error':'user not exist in bdd'});
+        }
+
+
+     })
+     .catch(function(err){
+      console.log(req.body.email);
+      console.log(email);
+      console.log(password);
+      console.log(req.body.password);
+       return res.status(500).json({'error':'unable to verify user'});
+     });
+     
+        
     };
    
